@@ -1,0 +1,20 @@
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #666;
+  animation: bounce 0.5s ease-in-out infinite;
+}
+
+[data-theme='dark'] .dot {
+  background-color: #999;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}

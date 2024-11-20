@@ -1,6 +1,6 @@
 export const defaultMetadata = {
   title: {
-    default: 'Xahead | AI Consulting',
+    default: 'Xahead | AI Consulting & Solutions',
     template: '%s | Xahead'
   },
   description: 'Xahead bietet professionelle KI-Beratung und Implementierungslösungen für Unternehmen. Spezialisiert auf RAG, autonome Agenten und angewandte KI.',
@@ -18,20 +18,20 @@ export const defaultMetadata = {
     locale: 'de_DE',
     url: 'https://www.xahead.de',
     siteName: 'Xahead',
-    title: 'Xahead | Professional AI Consulting',
+    title: 'Xahead | Professional AI Consulting & Solutions',
     description: 'Xahead bietet professionelle KI-Beratung und Implementierungslösungen für Unternehmen. Spezialisiert auf RAG, autonome Agenten und angewandte KI.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Xahead AI Consulting',
+        alt: 'Xahead AI Consulting & Solutions',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Xahead | Professional AI Consulting',
+    title: 'Xahead | Professional AI Consulting & Solutions',
     description: 'Xahead bietet professionelle KI-Beratung und Implementierungslösungen für Unternehmen.',
     images: ['/og-image.png'],
   },

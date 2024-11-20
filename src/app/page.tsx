@@ -4,11 +4,11 @@ import PageTransition from "@/components/PageTransition";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'xahead | Professional AI Consulting',
+  title: 'xahead | Professional AI Consulting & Solutions',
   description: 'xahead bietet professionelle KI-Beratung und maßgeschneiderte Lösungen für Unternehmen. Wir begleiten Sie auf Ihrem Weg zur erfolgreichen KI-Integration.',
   keywords: ['KI-Beratung', 'AI Consulting', 'Künstliche Intelligenz', 'Enterprise AI', 'KI-Lösungen', 'KI-Integration'],
   openGraph: {
-    title: 'xahead | Professional AI Consulting',
+    title: 'xahead | Professional AI Consulting & Solutions',
     description: 'xahead bietet professionelle KI-Beratung und maßgeschneiderte Lösungen für Unternehmen. Wir begleiten Sie auf Ihrem Weg zur erfolgreichen KI-Integration.',
     locale: 'de_DE',
     type: 'website',
@@ -17,13 +17,13 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'xahead AI Consulting',
+        alt: 'xahead AI Consulting & Solutions',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'xahead | Professional AI Consulting',
+    title: 'xahead | Professional AI Consulting & Solutions',
     description: 'xahead bietet professionelle KI-Beratung und maßgeschneiderte Lösungen für Unternehmen. Wir begleiten Sie auf Ihrem Weg zur erfolgreichen KI-Integration.',
     images: ['/og-image.png'],
   },

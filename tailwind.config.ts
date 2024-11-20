@@ -40,9 +40,20 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-subtle': 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
       },
+      keyframes: {
+        'bounce-loader': {
+          '0%, 80%, 100%': { transform: 'translateY(0)' },
+          '40%': { transform: 'translateY(-8px)' }
+        }
+      },
+      animation: {
+        'bounce-loading': 'bounce-loader 1.4s infinite ease-in-out'
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 
 export default config;
