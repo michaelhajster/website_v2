@@ -2,6 +2,7 @@
 
 import { Menu, X, Moon, Sun } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -40,11 +41,11 @@ export default function Header() {
   };
 
   const navItems = [
-    { href: '/', label: 'Home' },
+    { href: '/', label: 'Startseite' },
     { href: '/foundation', label: 'Foundation Services' },
     { href: '/advanced', label: 'Advanced Solutions' },
-    { href: '/about', label: 'About Us' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/about', label: 'Über uns' },
+    { href: '/contact', label: 'Kontakt' },
   ];
 
   return (
@@ -52,6 +53,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
+          <Image
+            src={isDark ? "/symbol_white.png" : "/symbol.png"}
+            alt="xahead logo"
+            width={32}
+            height={32}
+            className="w-8 h-8 transition-all"
+          />
           <span className="font-bold text-xl">xahead</span>
         </Link>
 
@@ -61,18 +69,21 @@ export default function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm transition-colors hover:text-foreground ${
+              className={`text-sm transition-all relative group ${
                 pathname === item.href
                   ? 'text-foreground font-medium'
-                  : 'text-foreground/60'
+                  : 'text-foreground/60 hover:text-foreground'
               }`}
             >
               {item.label}
+              <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground transition-all duration-300 group-hover:w-full ${
+                pathname === item.href ? 'w-full' : ''
+              }`} />
             </Link>
           ))}
           <button
             onClick={toggleDarkMode}
-            className="p-2 hover:bg-foreground/[.08] rounded-full transition-colors"
+            className="p-2 hover:bg-foreground/[.08] rounded-full transition-all duration-300"
             aria-label="Toggle dark mode"
           >
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

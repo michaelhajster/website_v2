@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein"),
@@ -17,6 +19,7 @@ const inputClasses = "w-full px-4 py-2 rounded-lg border border-black/[.08] dark
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -29,12 +32,29 @@ export default function ContactForm() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Add timestamp to the data
+      const submissionData = {
+        ...data,
+        timestamp: new Date(),
+      };
+
+      console.log('Attempting to submit:', submissionData);
+      
+      // Add document to Firestore
+      const docRef = await addDoc(collection(db, "contact_submissions"), submissionData);
+      console.log('Document written with ID: ', docRef.id);
+      
       setSubmitSuccess(true);
       reset();
     } catch (error) {
       console.error('Error submitting form:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? `Fehler: ${error.message}` 
+          : 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -104,19 +124,27 @@ export default function ContactForm() {
         </div>
       </div>
 
+      {submitError && (
+        <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          {submitError}
+        </div>
+      )}
+
+      {submitSuccess && (
+        <div className="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+          Ihre Nachricht wurde erfolgreich gesendet. Wir werden uns in Kürze bei Ihnen melden.
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full h-12 rounded-full bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors disabled:opacity-50"
+        className={`mt-6 w-full py-2 px-4 rounded-lg bg-gradient-to-r from-[#0A6DC2] to-[#179FEE] text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 ${
+          isSubmitting ? 'cursor-not-allowed' : 'cursor-pointer'
+        }`}
       >
-        {isSubmitting ? "Wird gesendet..." : "Nachricht senden"}
+        {isSubmitting ? 'Wird gesendet...' : 'Nachricht senden'}
       </button>
-
-      {submitSuccess && (
-        <p className="text-green-500 text-center">
-          Vielen Dank für Ihre Nachricht. Wir melden uns in Kürze bei Ihnen.
-        </p>
-      )}
     </form>
   );
-} 
+}

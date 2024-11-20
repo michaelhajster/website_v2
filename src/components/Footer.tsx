@@ -17,7 +17,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Services */}
           <div className="space-y-4">
             <h3 className="font-semibold">Services</h3>
             <nav className="flex flex-col gap-2">
@@ -27,8 +27,8 @@ export default function Footer() {
               <a href="/advanced" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
                 Advanced Solutions
               </a>
-              <a href="/contact" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
-                Kontakt
+              <a href="/about" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
+                Über uns
               </a>
             </nav>
           </div>
@@ -41,7 +41,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t transition-colors border-[--border-light] text-sm text-foreground/70 flex justify-between items-center">
-          <p>© {year} xahead. Alle Rechte vorbehalten.</p>
+          <p> {year} xahead. Alle Rechte vorbehalten.</p>
           <a 
             href="/impressum" 
             className="hover:text-foreground transition-colors"
@@ -52,4 +52,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-} 
+}

@@ -1,69 +1,126 @@
-import { ArrowRight, BookOpen, Bot } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Button from "@/components/Button";
+import PageTransition from "@/components/PageTransition";
+import { Metadata } from 'next';
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: 'xahead | Professional AI Consulting',
+  description: 'xahead bietet professionelle KI-Beratung und maßgeschneiderte Lösungen für Unternehmen. Wir begleiten Sie auf Ihrem Weg zur erfolgreichen KI-Integration.',
+  keywords: ['KI-Beratung', 'AI Consulting', 'Künstliche Intelligenz', 'Enterprise AI', 'KI-Lösungen', 'KI-Integration'],
+  openGraph: {
+    title: 'xahead | Professional AI Consulting',
+    description: 'xahead bietet professionelle KI-Beratung und maßgeschneiderte Lösungen für Unternehmen. Wir begleiten Sie auf Ihrem Weg zur erfolgreichen KI-Integration.',
+    locale: 'de_DE',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'xahead AI Consulting',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'xahead | Professional AI Consulting',
+    description: 'xahead bietet professionelle KI-Beratung und maßgeschneiderte Lösungen für Unternehmen. Wir begleiten Sie auf Ihrem Weg zur erfolgreichen KI-Integration.',
+    images: ['/og-image.png'],
+  },
+};
+
+// Add JSON-LD structured data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'xahead',
+  description: 'Professional AI Consulting und Enterprise Lösungen',
+  url: 'https://xahead.com',
+  logo: '/og-image.png',
+  areaServed: 'DE',
+  sameAs: [], // Add social media links if available
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    availableLanguage: ['de', 'en'],
+  },
+  offers: {
+    '@type': 'Offer',
+    itemOffered: [
+      {
+        '@type': 'Service',
+        name: 'AI Consulting',
+        description: 'Professionelle KI-Beratung für Unternehmen'
+      },
+      {
+        '@type': 'Service',
+        name: 'Enterprise AI Solutions',
+        description: 'Maßgeschneiderte KI-Lösungen für Unternehmen'
+      }
+    ]
+  }
+};
+
+export default function HomePage() {
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="max-w-5xl mx-auto space-y-16">
-        {/* Hero Section */}
-        <section className="space-y-6">
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
-            Bereiten Sie Ihr Unternehmen auf die Zukunft von AI vor
-          </h1>
-          
-          <p className="text-xl sm:text-2xl text-foreground/80 leading-relaxed max-w-3xl">
-            Zukunftssichere AI-Strategien und Lösungen für Ihr Unternehmen
-          </p>
-          
-          <p className="text-lg text-foreground/70 max-w-3xl">
-            xahead ist Ihr Partner für AI – von strategischer Beratung bis zur Entwicklung leistungsstarker Software, die AI direkt in Ihre Prozesse integriert und Ihr Unternehmen voranbringt.
-          </p>
-        </section>
-
-        {/* Service Highlights */}
-        <section className="w-full grid gap-8 sm:grid-cols-2">
-          {/* Foundation Services */}
-          <div className="card">
-            <div className="h-12 w-12 rounded-full bg-foreground/[.08] flex items-center justify-center">
-              <BookOpen className="h-6 w-6" />
-            </div>
-            <h2 className="text-2xl font-semibold">Foundation Services</h2>
-            <p className="text-foreground/70">
-              Von AI-Literacy-Workshops bis hin zur Use Case Discovery – wir helfen Ihnen, die Grundlagen zu verstehen und Anwendungsfälle zu identifizieren, die Ihre strategischen Ziele unterstützen.
+    <PageTransition>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="p-8 pb-24 sm:p-20 sm:pb-24 font-[family-name:var(--font-geist-sans)]">
+        <main className="max-w-5xl mx-auto space-y-16">
+          {/* Hero Section */}
+          <section className="space-y-6 text-center">
+            <h1 className="text-5xl sm:text-6xl font-bold leading-tight">
+              <span className="text-gradient">AI-Lösungen</span> für Ihr Unternehmen
+            </h1>
+            <p className="text-xl text-foreground/80 leading-relaxed max-w-3xl mx-auto">
+              Wir unterstützen Sie bei der Integration von KI in Ihre Geschäftsprozesse.
+              Von der Strategie bis zur Umsetzung – maßgeschneidert für Ihren Erfolg.
             </p>
-            <a
-              href="/foundation"
-              className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
-            >
-              Foundation Services entdecken <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
+          </section>
 
-          {/* Advanced Solutions */}
-          <div className="card">
-            <div className="h-12 w-12 rounded-full bg-foreground/[.08] flex items-center justify-center">
-              <Bot className="h-6 w-6" />
+          {/* Features Section */}
+          <section className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="card group">
+              <h3 className="text-xl font-semibold">Strategie & Beratung</h3>
+              <p className="text-foreground/70">
+                Entwickeln Sie mit uns eine maßgeschneiderte AI-Strategie für Ihr Unternehmen.
+              </p>
             </div>
-            <h2 className="text-2xl font-semibold">Advanced Solutions</h2>
-            <p className="text-foreground/70">
-              Ob autonome Agenten, RAG-Systeme oder maßgeschneiderte Software – unsere fortgeschrittenen AI-Lösungen helfen Unternehmen, die nächste Innovationsstufe zu erreichen und AI direkt in ihre Prozesse zu integrieren.
-            </p>
-            <a
-              href="/advanced"
-              className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
-            >
-              Advanced Solutions erkunden <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-        </section>
+            
+            <div className="card group">
+              <h3 className="text-xl font-semibold">Implementierung</h3>
+              <p className="text-foreground/70">
+                Setzen Sie AI-Lösungen effizient und skalierbar in Ihrer Organisation um.
+              </p>
+            </div>
+            
+            <div className="card group">
+              <h3 className="text-xl font-semibold">Optimierung</h3>
+              <p className="text-foreground/70">
+                Verbessern Sie kontinuierlich Ihre AI-Systeme für maximale Leistung.
+              </p>
+            </div>
+          </section>
 
-        {/* CTA Buttons */}
-        <div className="flex gap-4 items-center flex-col sm:flex-row pt-4">
-          <Button href="/contact" className="w-full sm:w-auto">
-            Starten Sie Ihre AI-Reise
-          </Button>
-        </div>
-      </main>
-    </div>
+          {/* CTA Section */}
+          <section className="text-center space-y-4">
+            <h2 className="text-3xl sm:text-4xl font-bold">
+              Bereit für den nächsten Schritt?
+            </h2>
+            <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
+              Lassen Sie uns gemeinsam die Möglichkeiten von AI für Ihr Unternehmen erkunden.
+            </p>
+            <div className="mt-6">
+              <Button href="/contact" className="button-primary">
+                Jetzt Kontakt aufnehmen
+              </Button>
+            </div>
+          </section>
+        </main>
+      </div>
+    </PageTransition>
   );
 }
