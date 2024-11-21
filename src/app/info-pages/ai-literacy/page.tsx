@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Brain, CheckCircle, Lightbulb } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Button from "@/components/Button";
 import PageTransition from "@/components/PageTransition";
 import { Metadata } from 'next';
@@ -76,7 +76,7 @@ export default function AILiteracyPage() {
           <div className="grid gap-8 sm:grid-cols-2">
             <div className="card hover:shadow-lg transition-all">
               <div className="h-12 w-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
-                <BookOpen className="h-6 w-6 text-primary" />
+                <ArrowRight className="h-6 w-6 text-primary" />
               </div>
               <h2 className="text-2xl font-semibold">Was Sie lernen</h2>
               <ul className="space-y-4 text-foreground/70">

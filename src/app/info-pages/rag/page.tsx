@@ -1,4 +1,4 @@
-import { ArrowRight, Database, Network, CheckCircle, Lightbulb } from "lucide-react";
+import { ArrowRight, Bot, Database } from "lucide-react";
 import Button from "@/components/Button";
 import PageTransition from "@/components/PageTransition";
 import { Metadata } from 'next';
@@ -93,20 +93,20 @@ export default function RAGPage() {
 
             <div className="card hover:shadow-lg transition-all">
               <div className="h-12 w-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
-                <Network className="h-6 w-6 text-primary" />
+                <Bot className="h-6 w-6 text-primary" />
               </div>
               <h2 className="text-2xl font-semibold">Anwendungsfälle</h2>
               <ul className="space-y-4 text-foreground/70">
                 <li className="flex gap-3">
-                  <Network className="h-5 w-5 flex-shrink-0" />
+                  <Bot className="h-5 w-5 flex-shrink-0" />
                   <span>Intelligente Dokumentensuche und -analyse</span>
                 </li>
                 <li className="flex gap-3">
-                  <Network className="h-5 w-5 flex-shrink-0" />
+                  <Bot className="h-5 w-5 flex-shrink-0" />
                   <span>Automatisierte Kundenbetreuung mit Kontext</span>
                 </li>
                 <li className="flex gap-3">
-                  <Network className="h-5 w-5 flex-shrink-0" />
+                  <Bot className="h-5 w-5 flex-shrink-0" />
                   <span>Wissensmanagement und Entscheidungsunterstützung</span>
                 </li>
               </ul>

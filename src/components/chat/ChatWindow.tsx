@@ -32,8 +32,9 @@ export default function ChatWindow() {
           messages: [WELCOME_MESSAGE]
         });
         setSessionId(sessionRef.id);
-      } catch (error) {
-        console.error('Error creating chat session:', error);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('Error creating chat session:', errorMessage);
         // Continue with local-only chat if Firebase fails
       }
     };
@@ -58,8 +59,9 @@ export default function ChatWindow() {
         messages: newMessages,
         lastActive: new Date()
       });
-    } catch (error) {
-      console.error('Error updating chat history:', error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Error updating chat history:', errorMessage);
       // Continue with local-only chat if Firebase fails
     }
   };
@@ -77,8 +79,10 @@ export default function ChatWindow() {
       };
       const newMessages = [...messages, errorMessage];
       setMessages(newMessages);
-      await updateChatHistory(newMessages).catch(() => {
-        // Silently fail Firebase save - chat still works locally
+      await updateChatHistory(newMessages).catch((error: unknown) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('Error saving chat:', errorMessage);
+        // Continue without saving to Firebase
       });
       return;
     }
@@ -92,8 +96,10 @@ export default function ChatWindow() {
 
     const messagesWithUser = [...messages, userMessage];
     setMessages(messagesWithUser);
-    await updateChatHistory(messagesWithUser).catch(() => {
-      // Silently fail Firebase save - chat still works locally
+    await updateChatHistory(messagesWithUser).catch((error: unknown) => {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Error saving chat:', errorMessage);
+      // Continue without saving to Firebase
     });
     setInput('');
     setIsLoading(true);
@@ -123,21 +129,26 @@ export default function ChatWindow() {
 
       const newMessages = [...messagesWithUser, assistantMessage];
       setMessages(newMessages);
-      await updateChatHistory(newMessages).catch(() => {
-        // Silently fail Firebase save - chat still works locally
+      await updateChatHistory(newMessages).catch((error: unknown) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('Error saving chat:', errorMessage);
+        // Continue without saving to Firebase
       });
-    } catch (error: any) {
-      console.error('Chat error:', error);
-      const errorMessage: ChatMessageType = {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Chat error:', errorMessage);
+      const errorMessageContent: ChatMessageType = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: error.message || 'Entschuldigung, es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+        content: errorMessage,
         timestamp: new Date(),
       };
-      const newMessages = [...messagesWithUser, errorMessage];
+      const newMessages = [...messagesWithUser, errorMessageContent];
       setMessages(newMessages);
-      await updateChatHistory(newMessages).catch(() => {
-        // Silently fail Firebase save - chat still works locally
+      await updateChatHistory(newMessages).catch((error: unknown) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('Error saving chat:', errorMessage);
+        // Continue without saving to Firebase
       });
     } finally {
       setIsLoading(false);

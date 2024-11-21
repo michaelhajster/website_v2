@@ -7,7 +7,7 @@ interface ErrorLog {
   path: string;
   userInput?: string;
   stack?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean | null | undefined>;
 }
 
 class ErrorMonitor {
@@ -31,7 +31,7 @@ class ErrorMonitor {
     metadata?: {
       userInput?: string;
       error?: Error;
-      additionalData?: Record<string, any>;
+      additionalData?: Record<string, string | number | boolean | null | undefined>;
     }
   ) {
     const errorLog: ErrorLog = {
@@ -53,26 +53,18 @@ class ErrorMonitor {
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.error('ChatBot Error:', errorLog);
+      console.error('Error:', errorLog);
     }
 
     // Here you could add external error reporting service integration
-    // e.g., Sentry, LogRocket, etc.
     this.reportToExternalService(errorLog);
   }
 
-  private reportToExternalService(errorLog: ErrorLog) {
+  private reportToExternalService(errorLog: ErrorLog): void {
     // TODO: Implement external error reporting service
-    // This is where you'd send errors to your chosen service
-    // Example with Sentry:
-    // Sentry.captureException(new Error(errorLog.message), {
-    //   level: errorLog.severity,
-    //   extra: {
-    //     path: errorLog.path,
-    //     userInput: errorLog.userInput,
-    //     metadata: errorLog.metadata,
-    //   },
-    // });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Would send to error service:', errorLog);
+    }
   }
 
   getRecentErrors(count: number = 10): ErrorLog[] {

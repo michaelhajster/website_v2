@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Database, Workflow } from "lucide-react";
+import { ArrowRight, Bot, Database } from "lucide-react";
 import Button from "@/components/Button";
 import PageTransition from "@/components/PageTransition";
 import { Metadata } from 'next';
