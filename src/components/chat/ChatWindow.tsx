@@ -5,6 +5,8 @@ import { ChatMessage as ChatMessageType } from '@/lib/chatbot/types';
 import ChatMessage from './ChatMessage';
 import { Send } from 'lucide-react';
 import styles from './ChatWindow.module.css';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
 
 const WELCOME_MESSAGE: ChatMessageType = {
   id: 'welcome',
@@ -17,7 +19,27 @@ export default function ChatWindow() {
   const [messages, setMessages] = useState<ChatMessageType[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize chat session
+  useEffect(() => {
+    const initSession = async () => {
+      try {
+        const sessionRef = await addDoc(collection(db, 'chatSessions'), {
+          startTime: new Date(),
+          lastActive: new Date(),
+          messages: [WELCOME_MESSAGE]
+        });
+        setSessionId(sessionRef.id);
+      } catch (error) {
+        console.error('Error creating chat session:', error);
+        // Continue with local-only chat if Firebase fails
+      }
+    };
+
+    initSession();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -27,17 +49,37 @@ export default function ChatWindow() {
     scrollToBottom();
   }, [messages]);
 
+  // Update entire chat history in Firebase
+  const updateChatHistory = async (newMessages: ChatMessageType[]) => {
+    if (!sessionId) return;
+
+    try {
+      await updateDoc(doc(db, 'chatSessions', sessionId), {
+        messages: newMessages,
+        lastActive: new Date()
+      });
+    } catch (error) {
+      console.error('Error updating chat history:', error);
+      // Continue with local-only chat if Firebase fails
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
     if (input.length > 500) {
-      setMessages((prev) => [...prev, {
+      const errorMessage: ChatMessageType = {
         id: Date.now().toString(),
         role: 'assistant',
         content: 'Ihre Nachricht ist zu lang. Bitte beschränken Sie sich auf maximal 500 Zeichen.',
         timestamp: new Date(),
-      }]);
+      };
+      const newMessages = [...messages, errorMessage];
+      setMessages(newMessages);
+      await updateChatHistory(newMessages).catch(() => {
+        // Silently fail Firebase save - chat still works locally
+      });
       return;
     }
 
@@ -48,7 +90,11 @@ export default function ChatWindow() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const messagesWithUser = [...messages, userMessage];
+    setMessages(messagesWithUser);
+    await updateChatHistory(messagesWithUser).catch(() => {
+      // Silently fail Firebase save - chat still works locally
+    });
     setInput('');
     setIsLoading(true);
 
@@ -56,7 +102,10 @@ export default function ChatWindow() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
+        body: JSON.stringify({ 
+          messages: messagesWithUser,
+          sessionId
+        }),
       });
 
       const data = await response.json();
@@ -72,7 +121,11 @@ export default function ChatWindow() {
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      const newMessages = [...messagesWithUser, assistantMessage];
+      setMessages(newMessages);
+      await updateChatHistory(newMessages).catch(() => {
+        // Silently fail Firebase save - chat still works locally
+      });
     } catch (error: any) {
       console.error('Chat error:', error);
       const errorMessage: ChatMessageType = {
@@ -81,7 +134,11 @@ export default function ChatWindow() {
         content: error.message || 'Entschuldigung, es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      const newMessages = [...messagesWithUser, errorMessage];
+      setMessages(newMessages);
+      await updateChatHistory(newMessages).catch(() => {
+        // Silently fail Firebase save - chat still works locally
+      });
     } finally {
       setIsLoading(false);
     }
