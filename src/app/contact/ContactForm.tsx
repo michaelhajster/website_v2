@@ -14,6 +14,8 @@ const formSchema = z.object({
   message: z.string().min(10, "Nachricht muss mindestens 10 Zeichen lang sein"),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 const inputClasses = "w-full px-4 py-2 rounded-lg border border-black/[.08] dark:border-white/[.24] hover:border-black/[.16] dark:hover:border-white/[.45] bg-white/[.03] dark:bg-white/[.08] focus:outline-none focus:ring-2 focus:ring-foreground/20 transition-colors text-foreground dark:text-white placeholder:text-foreground/70 dark:placeholder:text-white/70";
 
 export default function ContactForm() {
@@ -26,11 +28,11 @@ export default function ContactForm() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     setSubmitError(null);
     try {

@@ -54,7 +54,7 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src={isDark ? "/symbol_white.png" : "/symbol.png"}
+            src={isDark ? "/symbol_white.png" : "/Symbol.png"}
             alt="xahead logo"
             width={32}
             height={32}

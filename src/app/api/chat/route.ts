@@ -10,6 +10,12 @@ const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 10;
 const MESSAGE_MAX_LENGTH = 500;
 
+// Define OpenAI error type
+interface OpenAIError extends Error {
+  status?: number;
+  code?: string;
+}
+
 const requestCounts = new Map<string, { count: number; timestamp: number }>();
 
 const openai = new OpenAI({
@@ -110,17 +116,19 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ message: responseMessage });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const openAIError = error instanceof Error ? error : new Error('Unknown error occurred');
+    
     errorMonitor.logError(
       'Chat API error',
       'high',
       '/api/chat',
       {
-        error,
+        error: openAIError,
         additionalData: {
-          status: error.status,
-          code: error.code,
-          type: error.type
+          status: (error as OpenAIError).status,
+          code: (error as OpenAIError).code,
+          type: openAIError.name
         }
       }
     );
