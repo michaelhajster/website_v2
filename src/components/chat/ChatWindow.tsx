@@ -22,26 +22,6 @@ export default function ChatWindow() {
   const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize chat session
-  useEffect(() => {
-    const initSession = async () => {
-      try {
-        const sessionRef = await addDoc(collection(db, 'chatSessions'), {
-          startTime: new Date(),
-          lastActive: new Date(),
-          messages: [WELCOME_MESSAGE]
-        });
-        setSessionId(sessionRef.id);
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-        console.error('Error creating chat session:', errorMessage);
-        // Continue with local-only chat if Firebase fails
-      }
-    };
-
-    initSession();
-  }, []);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -49,6 +29,22 @@ export default function ChatWindow() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const createChatSession = async (initialMessages: ChatMessageType[]) => {
+    try {
+      const sessionRef = await addDoc(collection(db, 'chatSessions'), {
+        startTime: new Date(),
+        lastActive: new Date(),
+        messages: initialMessages
+      });
+      setSessionId(sessionRef.id);
+      return sessionRef.id;
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Error creating chat session:', errorMessage);
+      return null;
+    }
+  };
 
   // Update entire chat history in Firebase
   const updateChatHistory = async (newMessages: ChatMessageType[]) => {
@@ -69,6 +65,22 @@ export default function ChatWindow() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Create session if this is the first message
+    if (!sessionId) {
+      const newSessionId = await createChatSession([WELCOME_MESSAGE]);
+      if (!newSessionId) {
+        // Handle error creating session
+        const errorMessage: ChatMessageType = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: 'Es gab ein Problem beim Erstellen der Chat-Sitzung. Bitte versuchen Sie es später erneut.',
+          timestamp: new Date(),
+        };
+        setMessages([...messages, errorMessage]);
+        return;
+      }
+    }
 
     if (input.length > 500) {
       const errorMessage: ChatMessageType = {
