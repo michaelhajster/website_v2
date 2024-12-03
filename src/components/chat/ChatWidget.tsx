@@ -10,11 +10,9 @@ export default function ChatWidget() {
 
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 flex flex-col items-end">
-      <div 
-        className={`transition-all duration-300 ${
-          isMinimized ? 'hidden' : ''
-        } ${
-          isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+      <div
+        className={`absolute bottom-16 right-0 sm:bottom-20 transition-all duration-300 ${
+          isOpen && !isMinimized ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
         <div className="relative w-[calc(100vw-2rem)] sm:w-auto">
