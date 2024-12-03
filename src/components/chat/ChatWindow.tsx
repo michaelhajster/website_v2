@@ -175,7 +175,7 @@ export default function ChatWindow() {
   };
 
   return (
-    <div className="flex flex-col h-[80vh] sm:h-[600px] w-full sm:w-[500px] max-w-2xl bg-background border border-[--border-light] rounded-2xl overflow-hidden shadow-xl">
+    <div className="flex flex-col h-[80vh] sm:h-[500px] w-full sm:w-[500px] max-w-2xl bg-background border border-[--border-light] rounded-2xl overflow-hidden shadow-xl">
       <div className="p-3 sm:p-4 border-b border-[--border-light]">
         <h2 className="text-base sm:text-lg font-semibold">xahead KI-Assistent</h2>
         <p className="text-xs sm:text-sm text-foreground/70">Wie kann ich Ihnen heute helfen?</p>
